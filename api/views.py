@@ -391,7 +391,7 @@ class CourseDetailView(APIView):
             is_enrolled = Enrollment.objects.filter(student=student, course=course).exists()
 
             if is_enrolled:
-                serializer = CourseDetailSerializer(course)
+                serializer = CourseDetailSerializer(course, context={'request': request})
                 print(serializer.data)  # Full details
                 return Response({**serializer.data, "edit": False, "is_enrolled": True})  # No edit access
             else:
