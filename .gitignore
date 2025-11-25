@@ -1,0 +1,10 @@
+_pycache_/
+migrations/
+cms_venv/
+media/
+# Python cache
+__pycache__/
+*.pyc
+# Sqlite database (if you don't want to push db file)
+db.sqlite3
+.env
