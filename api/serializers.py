@@ -11,9 +11,17 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'mobile_number', 'profile_pic', 'bio']
+
+    def get_profile_pic(self, obj):
+        request = self.context.get('request')
+        if obj.profile_pic and request:
+            return request.build_absolute_uri(obj.profile_pic.url)
+        return None
 
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
