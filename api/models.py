@@ -1,5 +1,17 @@
-from django.contrib.auth.models import AbstractUser
+# Django built-in imports
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.utils.timezone import now
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils.text import slugify
+
+# Image processing
+from PIL import Image, ImageDraw, ImageFont
+
+# System / utilities
+import os
+
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
@@ -43,11 +55,6 @@ class Course(models.Model):
 
     def __str__(self):
         return f"{self.title} by {self.teacher.user.username}"
-
-
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 class Enrollment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='enrollments')
@@ -93,21 +100,6 @@ class CourseFile(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.course.title})"
-    
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.timezone import now
-
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.timezone import now
-
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.timezone import now
 
 class Progress(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='progress')
@@ -127,21 +119,6 @@ class Progress(models.Model):
         super().save(*args, **kwargs)
 
 # ✅
-
-from django.utils.timezone import now
-
-def save(self, *args, **kwargs):
-    if self.completed_lessons >= self.total_lessons:
-        self.is_completed = True
-        self.completion_date = now().date()  # Set completion date
-    super().save(*args, **kwargs)
-
-
-from django.db import models
-from django.utils.text import slugify
-from PIL import Image, ImageDraw, ImageFont
-import os
-
 class Certificate(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='certificates')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='certificates')
