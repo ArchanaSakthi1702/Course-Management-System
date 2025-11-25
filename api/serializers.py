@@ -192,7 +192,8 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'start_date', 'end_date', 'total_lessons', 'thumbnail', 'files', 'assignments', 'announcements']
 
     def get_files(self, obj):
-        return [{"id": file.id, "title": file.title, "file": file.file.url} for file in obj.files.all()]
+        request = self.context.get('request')
+        return [{"id": file.id, "title": file.title, "file": request.build_absolute_uri(file.file.url)} for file in obj.files.all()]
 
     def get_assignments(self, obj):
         return [{"id": assignment.id, "title": assignment.title, "description": assignment.description, "due_date": assignment.due_date} for assignment in obj.assignments.all()]
