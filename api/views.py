@@ -57,12 +57,14 @@ class LoginView(APIView):
         return Response({"error": "Invalid credentials"}, status=400)
 
 # Retrieve User Profile
+# Retrieve User Profile
 class UserProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         user = request.user
-        user_data = UserSerializer(user).data
+        # ✅ Pass `request` in context for absolute URLs
+        user_data = UserSerializer(user, context={'request': request}).data
 
         # Check if the user is a teacher
         try:
@@ -80,6 +82,7 @@ class UserProfileView(APIView):
         except Student.DoesNotExist:
             pass
 
+        # ✅ Optional: remove print in production
         print(user_data)
         return Response(user_data)
 
